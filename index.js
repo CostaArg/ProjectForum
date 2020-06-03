@@ -33,9 +33,7 @@ app.get('/login', function(request, response) {
 });
 
 app.get('/post', function(request, response) {
-	console.log(request.query.id);
 	Post.findOne({'_id':request.query.id}, function(err, post){
-		console.log(post);
 		response.render('post', {title: post.titlename, data:post.content});
 	});
 });

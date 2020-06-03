@@ -2,19 +2,25 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
-        <title></title>
+    <title></title>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link href="https://fonts.googleapis.com/css?family=Khula" rel="stylesheet" type='text/css'>
+    <link rel="stylesheet" href="css/style.css">
 
   </head>
   <body>
     <h2>forum</h2>
-    <a href="/login">login</a>
-    <p>|</p>
-    <a href="/register">register</a>
-    <p>|</p>
-    <a href="/createPost">Create a Post</a>
+    <div class="btn_wrapper">
+      <a style="text-decoration: none" class="button" href="/login">Login</a>
+      <a style="text-decoration: none" class="button" href="/register">Register</a>
+      <a style="text-decoration: none" class="button" href="/createPost">Create a Post</a>
+    </div>
+  <br>
+  <br>
 
-<div id="container" ></div>
+<div id="container"></div>
 
 <script>
 // decoding html entities
@@ -27,7 +33,7 @@ var parsedPosts = JSON.parse(posts);
 
 var htmlElements = "";
 for (var i = 0; i < parsedPosts.length ; i++) {
-htmlElements += '<div class="postTab" <h4><a href="/post?id=' + parsedPosts[i]._id + '">' + parsedPosts[i].titlename + '</a></h4><p> By Potato21, 12 hours ago </p></div>';
+htmlElements += '<div class="postTab" <h4><a style="text-decoration: none" href="/post?id=' + parsedPosts[i]._id + '">' + parsedPosts[i].titlename + '</a></h4><p> By Potato21, 12 hours ago </p></div>';
 }
 var container = document.getElementById("container");
 container.innerHTML += htmlElements;
