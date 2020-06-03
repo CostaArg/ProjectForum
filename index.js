@@ -1,3 +1,4 @@
+//declaring variables
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser')
@@ -9,27 +10,35 @@ var Post = require('./models/Post');
 
 var app = express();
 
+//The following line is if we wanted to use the code in an offline database or to test it by having the ip address as localhost
 //var db = mongoose.connect('mongodb://localhost:27017/forum');
+
+//database connection starts here
 var db = mongoose.connect('mongodb://kostas123:testarw123@ds137441.mlab.com:37441/forum');
 var session = require('express-session')
 
+
+//we set ejs as our default view engine
 app.set('view engine', 'ejs');
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+//session starts here
 app.use(session({
   secret: 'whatever',
   resave: false,
   saveUninitialized: true,
 }));
 
+//this is the app.get of the home page
 app.get('/', function(request, response) {
 	Post.find({}, function(err, postsList, commentList) {
 		response.render('index', {title: 'home', posts: JSON.stringify(postsList)});
     });
 });
 
+//this is the app.get of the login page
 app.get('/login', function(request, response) {
   if (request.session.user) {
     response.render('error', {
@@ -40,6 +49,7 @@ app.get('/login', function(request, response) {
   response.render('login', {title: 'login'});
 }});
 
+//this is the app.get of the logout page
 app.get('/logout', function(request, response) {
   if (request.session.user) {
     request.session.destroy();
@@ -51,6 +61,7 @@ app.get('/logout', function(request, response) {
     })
   }});
 
+//this is the app.get of the page page
 app.get('/post', function(request, response) {
   	Post.findOne({'_id': request.query.id}, function(err, post){
   		if(!err){
@@ -64,6 +75,7 @@ app.get('/post', function(request, response) {
   		});
   });
 
+//if the user enters his password/username correctly he is logged in
 app.post('/login', function(request, response) {
 
   User.findOne({'username': request.body.username}, function(err, user) {
@@ -82,6 +94,7 @@ app.post('/login', function(request, response) {
 	});
 });
 
+//here we are saving a new account to the database
 app.post('/register', function(request, response) {
   if (request.body.username && request.body.password) {
     User.create({
@@ -105,10 +118,12 @@ app.post('/register', function(request, response) {
   }
 });
 
+//this is the app.get of the register page
 app.get('/register', function(request, response) {
   response.render('register', {title: 'register'});
 });
 
+//here the post creation page
 app.post('/createPost', function(request, response) {
     if (request.session.user) {
       if (request.body.titlename && request.body.content) {
@@ -140,6 +155,7 @@ app.post('/createPost', function(request, response) {
       }
     });
 
+//this is the app.get of the createpost page
 app.get('/createPost', function(request, response) {
     if (request.session.user) {
 		response.render('createPost', {title: 'Post Creation'});
@@ -152,6 +168,7 @@ app.get('/createPost', function(request, response) {
 	}
   });
 
+//this is where the user can create a comment in a post
 app.post('/comment', function(request, response) {
         if (request.session.user) {
           if (request.body.comment) {

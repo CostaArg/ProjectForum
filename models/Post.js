@@ -3,6 +3,7 @@ var bcrypt = require('bcrypt');
 
 var Schema = mongoose.Schema;
 
+//this is where we declare the variables for the database
 var postSchema = new Schema ({
 titlename: { type: String, required: true},
 content: { type: String, required: true},
