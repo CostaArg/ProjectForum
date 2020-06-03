@@ -32,10 +32,25 @@ app.get('/login', function(request, response) {
   response.render('login', {title: 'login'});
 });
 
+app.get('/logout', function(request, response) {
+  if request.session.user {
+    request.session.destroy();
+    response.render('logout', {title: 'logout'});
+  } else {
+    response.render('error'), {error: 'You are already logged out'}
+  }
+});
+
+
 app.get('/post', function(request, response) {
 	Post.findOne({'_id':request.query.id}, function(err, post){
-		response.render('post', {title: post.titlename, data:post.content});
-	});
+		if(!err){
+			response.render('post', {title: post.titlename, data:post.content, user:post.user, time:post.created_at.toUTCString()});
+		}
+		else{
+			response.render('error', {error: err, title: 'error'});
+		}
+		});
 });
 
 app.post('/login', function(request, response) {
@@ -43,15 +58,15 @@ app.post('/login', function(request, response) {
   User.findOne({'username': request.body.username}, function(err, user) {
 
     if (err) return response.render('error', {error: err, title: 'error'});
-    if (!user) return response.render('error'), {error: 'user does not exist'}
+    if (!user) return response.render('error'), {error: 'User does not exist'}
 	bcrypt.compare(request.body.password, user.password, function(err, res) {
 		if(res){
 		  request.session.user = user
 		  request.session.save();
 
-		  response.redirect('/me')
+		  response.redirect('/')
 		} else {
-		  return response.render('error', {error: 'incorrect credentials', title: 'error'});
+		  return response.render('error', {error: 'Incorrect credentials', title: 'error'});
 		}
 		});
 	});
@@ -67,7 +82,7 @@ app.post('/register', function(request, response) {
       if (error) {
         response.render('error', {
           title: 'error',
-          error: 'user was not created'
+          error: 'User was not created'
         });
       } else {
         response.send(user);
@@ -76,7 +91,7 @@ app.post('/register', function(request, response) {
   } else {
     response.render('error', {
       title: 'error',
-      error: 'username or password required'
+      error: 'Username or password required'
     });
   }
 });
@@ -100,37 +115,47 @@ var authenticated = function(request, response, next) {
   }
 
   app.post('/createPost', function(request, response) {
-    if (request.body.titlename && request.body.content) {
-      // create post
-      Post.create({
-        titlename: request.body.titlename,
-        content: request.body.content
-      }, function(error, user) {
-        if (error) {
-          response.render('error', {
-            title: 'error',
-            error: 'post was not created'
-          });
-        } else {
-          response.send("CREATED");
-        }
-      });
+    if (request.session.user) {
+      if (request.body.titlename && request.body.content) {
+        // create post
+        Post.create({
+          titlename: request.body.titlename,
+          content: request.body.content,
+  		user: request.session.user.username
+        }, function(error, user) {
+          if (error) {
+            response.render('error', {
+              title: 'error',
+              error: 'Post was not created'
+            });
+          } else {
+            response.send("CREATED");
+          }
+        });
+      } else {
+        response.render('error', {
+          title: 'error',
+          error: 'Titlename or content required'
+        });
+      }
     } else {
-      response.render('error', {
-        title: 'error',
-        error: 'titlename or content required'
-      });
-    }
-  });
+        response.render('error', {
+          title: 'error',
+          error: 'You are not logged in'
+        });
+      }
+    });
 
   app.get('/createPost', function(request, response) {
-    response.render('createPost', {title: 'Post Creation'});
+    if (request.session.user) {
+		response.render('createPost', {title: 'Post Creation'});
+	}
+	else{
+		 response.render('error', {
+          title: 'error',
+          error: 'You are not logged in'
+        });
+	}
   });
-
-  //routes
-app.get('/me', authenticated, function(request, response) {
-  response.send(request.session.user);
-});
-
 
 app.listen(6969);
