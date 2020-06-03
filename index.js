@@ -61,7 +61,7 @@ app.get('/logout', function(request, response) {
     })
   }});
 
-//this is the app.get of the page page
+//this is the app.get of the post page
 app.get('/post', function(request, response) {
   	Post.findOne({'_id': request.query.id}, function(err, post){
   		if(!err){
