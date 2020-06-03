@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html>
+
   <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <link rel="stylesheet" href="css/style.css">
-          <title>Create a Post</title>
-          <link rel="stylesheet" href="css/normalize.css">
-          <link href="https://fonts.googleapis.com/css?family=Khula" rel="stylesheet" type='text/css'>
-          <link rel="stylesheet" href="css/poststyle.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Create a Post</title>
+    <link href="https://fonts.googleapis.com/css?family=Khula" rel="stylesheet" type='text/css'>
+    <link rel="stylesheet" href="css/poststyle.css">
   </head>
+
   <body>
-    <a href="/">forum</a>
+    <a class="homeButton" href="/">forum</a>
 
     <form action="/createPost" method="POST">
       <h2>Create a Post</h2>
@@ -19,10 +20,10 @@
     <input class="title" type="text" name="titlename"/>
       <p></p>
       <h3>Content:</h3>
-    <textarea rows="4" col="30" class="content" name="content"/></textarea>
+    <textarea rows="4" col="30" name="content"/></textarea>
       </fieldset>
         <button type="submit">Create Post</button>
     </form>
+</body>
 
-  </body>
 </html>

@@ -1,45 +1,43 @@
 <!DOCTYPE html>
 <html>
+
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
     <title></title>
-    <link rel="stylesheet" href="css/normalize.css">
     <link href="https://fonts.googleapis.com/css?family=Khula" rel="stylesheet" type='text/css'>
-    <link rel="stylesheet" href="css/style.css">
-
   </head>
+
   <body>
-    <h2>forum</h2>
-    <div class="btn_wrapper">
-      <a style="text-decoration: none" class="button" href="/login">Login</a>
-      <a style="text-decoration: none" class="button" href="/register">Register</a>
-      <a style="text-decoration: none" class="button" href="/createPost">Create a Post</a>
-      <a style="text-decoration: none" class="button" href="/logout">Logout</a>
-    </div>
-  <br>
-  <br>
+      <h2>forum</h2>
+      <div class="btn_wrapper">
+        <a style="text-decoration: none" class="button" href="/login">Login</a>
+        <a style="text-decoration: none" class="button" href="/register">Register</a>
+        <a style="text-decoration: none" class="button" href="/createPost">Create a Post</a>
+        <a style="text-decoration: none" class="button" href="/logout">Logout</a>
+      </div>
 
 <div id="container"></div>
 
-<script>
-// decoding html entities
-var parser = new DOMParser;
-var dom = parser.parseFromString(
-    "<%=posts%>",
-    'text/html');
-var posts = dom.body.textContent;
-var parsedPosts = JSON.parse(posts);
+    <script>
+    // decoding html entities
+    var parser = new DOMParser;
+    var dom = parser.parseFromString(
+        "<%=posts%>",
+        'text/html');
+    var posts = dom.body.textContent;
+    var parsedPosts = JSON.parse(posts);
 
-var htmlElements = "";
-for (var i = 0; i < parsedPosts.length ; i++) {
-htmlElements += '<div class="postTab" <h4><a style="text-decoration: none" href="/post?id=' + parsedPosts[i]._id + '">' + parsedPosts[i].titlename + '</a></h4><p> By ' + parsedPosts[i].user + ' at ' + (new Date(parsedPosts[0].created_at).toUTCString()) + ' </p></div>';
-}
-var container = document.getElementById("container");
-container.innerHTML += htmlElements;
+    var htmlElements = "";
+    for (var i = 0; i < parsedPosts.length ; i++) {
+    htmlElements += '<div class="postTab" <h4><a style="text-decoration: none" href="/post?id=' + parsedPosts[i]._id + '">' + parsedPosts[i].titlename + '</a></h4><p> By ' + parsedPosts[i].user + ' at ' + (new Date(parsedPosts[0].created_at).toUTCString()) + ' </p></div>';
+    }
+    var container = document.getElementById("container");
+    container.innerHTML += htmlElements;
 
-</script>
+    </script>
+
 
   </body>
 </html>

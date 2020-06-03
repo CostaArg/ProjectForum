@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,21 +10,23 @@
     <link href="https://fonts.googleapis.com/css?family=Khula" rel="stylesheet" type='text/css'>
     <link rel="stylesheet" href="css/form.css">
   </head>
+
   <body>
-    <a href="/">forum</a>
+    <a class="homeButton" href="/">forum</a>
 
-<form action="/register" method="POST">
-      <h2>Register</h2>
-    <fieldset>
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="username">
+      <form action="/register" method="POST">
+            <h2>Register</h2>
+              <fieldset>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="username">
 
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password">
-    </fieldset>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password">
+              </fieldset>
 
-    <button type="submit">Register</button>
-</form>
+          <button type="submit">Register</button>
+      </form>
 
   </body>
+
 </html>

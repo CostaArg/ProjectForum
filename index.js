@@ -29,29 +29,36 @@ app.get('/', function(request, response) {
 });
 
 app.get('/login', function(request, response) {
+  if (request.session.user) {
+    response.render('error', {
+      title: 'error',
+      error: 'You are already logged in'
+    });
+  } else {
   response.render('login', {title: 'login'});
-});
+}});
 
 app.get('/logout', function(request, response) {
-  if request.session.user {
+  if (request.session.user) {
     request.session.destroy();
     response.render('logout', {title: 'logout'});
   } else {
-    response.render('error'), {error: 'You are already logged out'}
-  }
-});
-
+    response.render('error', {
+        title: 'error',
+        error: 'You are already logged out'
+    })
+  }});
 
 app.get('/post', function(request, response) {
-	Post.findOne({'_id':request.query.id}, function(err, post){
-		if(!err){
-			response.render('post', {title: post.titlename, data:post.content, user:post.user, time:post.created_at.toUTCString()});
-		}
-		else{
-			response.render('error', {error: err, title: 'error'});
-		}
-		});
-});
+  	Post.findOne({'_id':request.query.id}, function(err, post){
+  		if(!err){
+  			response.render('post', {title: post.titlename, data:post.content, user:post.user, time:post.created_at.toUTCString()});
+  		}
+  		else{
+  			response.render('error', {error: err, title: 'error'});
+  		}
+  		});
+  });
 
 app.post('/login', function(request, response) {
 
@@ -63,8 +70,7 @@ app.post('/login', function(request, response) {
 		if(res){
 		  request.session.user = user
 		  request.session.save();
-
-		  response.redirect('/')
+      response.redirect('/');
 		} else {
 		  return response.render('error', {error: 'Incorrect credentials', title: 'error'});
 		}
@@ -85,7 +91,8 @@ app.post('/register', function(request, response) {
           error: 'User was not created'
         });
       } else {
-        response.send(user);
+          response.send(user);
+//          response.redirect('/');
       }
     });
   } else {
@@ -108,13 +115,7 @@ app.get('/register', function(request, response) {
   response.render('register', {title: 'register'});
 });
 
-var authenticated = function(request, response, next) {
-  if (request.session && request.session.user) return next();
-
-    return response.redirect('/login');
-  }
-
-  app.post('/createPost', function(request, response) {
+app.post('/createPost', function(request, response) {
     if (request.session.user) {
       if (request.body.titlename && request.body.content) {
         // create post
@@ -129,7 +130,8 @@ var authenticated = function(request, response, next) {
               error: 'Post was not created'
             });
           } else {
-            response.send("CREATED");
+            response.send('CREATED');
+//            response.redirect('/');
           }
         });
       } else {
@@ -146,7 +148,7 @@ var authenticated = function(request, response, next) {
       }
     });
 
-  app.get('/createPost', function(request, response) {
+app.get('/createPost', function(request, response) {
     if (request.session.user) {
 		response.render('createPost', {title: 'Post Creation'});
 	}
