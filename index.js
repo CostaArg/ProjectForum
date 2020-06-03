@@ -9,6 +9,7 @@ var Post = require('./models/Post');
 var app = express();
 
 var db = mongoose.connect('mongodb://localhost:27017/forum');
+//var db = mongoose.connect('mongodb://kostas123:testarw123@ds137441.mlab.com:37441/forum');
 var session = require('express-session')
 
 app.set('view engine', 'ejs');
@@ -91,8 +92,7 @@ app.post('/register', function(request, response) {
           error: 'User was not created'
         });
       } else {
-          response.send(user);
-//          response.redirect('/');
+          response.redirect('/');
       }
     });
   } else {
@@ -122,16 +122,15 @@ app.post('/createPost', function(request, response) {
         Post.create({
           titlename: request.body.titlename,
           content: request.body.content,
-  		user: request.session.user.username
-        }, function(error, user) {
+  		    user: request.session.user.username
+        }, function(error, post) {
           if (error) {
             response.render('error', {
               title: 'error',
               error: 'Post was not created'
             });
           } else {
-            response.send('CREATED');
-//            response.redirect('/');
+            response.redirect( '/post?id=' + post._id)
           }
         });
       } else {

@@ -3,6 +3,18 @@ body {
   margin: 2em;
 }
 
+header {
+	height: 100px;
+}
+
+header h2{
+	float:left;
+	margin: 0;
+}
+
+#container{
+	margin-left: 5%;
+}
 .post {
   width: 700px;
   border: 2px solid gray;
