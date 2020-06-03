@@ -6,11 +6,11 @@ var Schema = mongoose.Schema;
 var commentSchema = new Schema ({
 comment: { type: String, required: true},
 user: { type: String, required: true},
-thread_id : { type: String, required: true},
-created_at: Date
-});
+created_at: Date,
+thread_id : { type: String, required: true},}
+);
 
-postSchema.pre('save', function(next) {
+commentSchema.pre('save', function(next) {
   var comment = this;
 
   if (!this.created_at) this.created_at = new Date();

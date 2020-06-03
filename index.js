@@ -4,6 +4,7 @@ var bodyParser = require('body-parser')
 var bcrypt = require('bcrypt')
 
 var User = require('./models/User');
+var comment = require('./models/comment');
 var Post = require('./models/Post');
 
 var app = express();
@@ -25,7 +26,7 @@ app.use(session({
 
 app.get('/', function(request, response) {
 	Post.find({}, function(err, postsList, commentList) {
-		response.render('index', {title: 'home', posts: JSON.stringify(postsList), comments: JSON.stringify(commentList)});
+		response.render('index', {title: 'home', posts: JSON.stringify(postsList)});
     });
 });
 
@@ -53,7 +54,9 @@ app.get('/logout', function(request, response) {
 app.get('/post', function(request, response) {
   	Post.findOne({'_id': request.query.id}, function(err, post){
   		if(!err){
-  			response.render('post', {thread_id: request.query.id, title: post.titlename, data: post.content, user: post.user, time: post.created_at.toUTCString()}); 
+			comment.find({'thread_id': request.query.id}, function(err, commentList){
+				response.render('post', {comments: JSON.stringify(commentList), thread_id: request.query.id, title: post.titlename, data: post.content, user: post.user, time: post.created_at.toUTCString()});
+			});
   		}
   		else{
   			response.render('error', {error: err, title: 'error'});
@@ -149,32 +152,21 @@ app.get('/createPost', function(request, response) {
 	}
   });
 
-app.get('/comment', function(request, response) {
-    	Post.find({'_id': request.query.id}, function(err, comment){
-    		if(!err){
-    			response.render('comment', {comment_title: comment.titlename, comment_data: comment.content, comment_user: comment.user, comment_time: comment.created_at.toUTCString()});
-    		}
-    		else{
-    			response.render('error', {error: err, title: 'error'});
-    		}
-    		});
-    });
-
 app.post('/comment', function(request, response) {
-        if (request.session.user.username) {
+        if (request.session.user) {
           if (request.body.comment) {
             comment.create({
-              text: request.body.text,
-      		    user: request.session.user,
-              thread_id: request.query.id
+              comment: request.body.comment,
+      		    user: request.session.user.username,
+              thread_id: request.body.thread_id
             }, function(error, comment) {
               if (error) {
                 response.render('error', {
                   title: 'error',
-                  error: 'Comment was not created'
+                  error: 'comment was not created'
                 });
               } else {
-                response.redirect( '/comment?id=' + comment._id)
+				response.redirect( '/post?id=' + comment.thread_id);
               }
             });
           } else {

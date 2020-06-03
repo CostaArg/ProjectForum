@@ -13,6 +13,8 @@
 
     <a class="homeButton" href="/">forum</a>
 
+    	<div id="container">
+
   <div>
     <h1>
       <span> <%=title%> </span>
@@ -24,47 +26,46 @@
     </div>
   </div>
 
-  <p> Replies:
-
   <div class="post">
     <form action="/comment" method="post">
 
-      <input type="hidden" name="thread_id" value="<%=thread_id%>">
-
-      
-
-      <fieldset>
       <h3>Comment:</h3>
     <textarea rows="4" col="30" name="comment"/></textarea>
-      </fieldset>
-        <button type="submit">Comment</button>
+    <br>
+<br>
 
-<script>
-        //comment
-            var comment_parser = new DOMParser;
-            var comment_dom = parser.parseFromString(
-                "<%=comment%>",
-                'text/html');
-            var comment = dom.body.textContent;
-            var parsedcomment = JSON.parse(comment);
+	    <input type="hidden" name="thread_id" value="<%=thread_id%>">
 
-            var comment_htmlElements = "";
-            for (var i = 0; i < parsedcomment.length ; i++) {
-            comment_htmlElements += '<div class="postTab" <h4><a style="text-decoration: none" href="/comment?id=' + parsedcomment[i]._id + '">' + '</a></h4><p> By ' + parsedcomment[i].comment.user + ' at ' + (new Date(parsedPosts[0].comment.created_at).toUTCString()) + ' </p></div>';
-            }
-            var comment_container = document.getElementById("comment_container");
-            comment_container.innerHTML += comment_htmlElements;
 
-</script>
-
-<p><%=comment_data%></p>
+        <button class="commentButton" type="submit">Comment</button>
+            <br>
+                <br>
+                    <br>
 
 
     </form>
 
-  </div>
-  </p>
+	<div id="comments"></div>
 
+    <script>
+
+    var parser = new DOMParser;
+    var dom = parser.parseFromString(
+        "<%=comments%>",
+        'text/html');
+    var comments = dom.body.textContent;
+    var parsedComments = JSON.parse(comments);
+
+    var htmlElements = "";
+    for (var i = 0; i < parsedComments.length ; i++) {
+    htmlElements += '<div class="commentTab" <p> By ' + parsedComments[i].user + ' at ' + (new Date(parsedComments[i].created_at).toUTCString()) + ' </p><p>' + parsedComments[i].comment + '</p></div>';
+    }
+    var container = document.getElementById("comments");
+    container.innerHTML += htmlElements;
+
+    </script>
+      </div>
+      </div>
 </body>
 
 </html>

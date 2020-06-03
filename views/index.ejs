@@ -33,7 +33,7 @@
 
     var htmlElements = "";
     for (var i = 0; i < parsedPosts.length ; i++) {
-    htmlElements += '<div class="postTab" <h4><a style="text-decoration: none" href="/post?id=' + parsedPosts[i]._id + '">' + parsedPosts[i].titlename + '</a></h4><p> By ' + parsedPosts[i].user + ' at ' + (new Date(parsedPosts[0].created_at).toUTCString()) + ' </p></div>';
+    htmlElements += '<div class="postTab" <h4><a style="text-decoration: none" href="/post?id=' + parsedPosts[i]._id + '">' + parsedPosts[i].titlename + '</a></h4><p> By ' + parsedPosts[i].user + ' at ' + (new Date(parsedPosts[i].created_at).toUTCString()) + ' </p></div>';
     }
     var container = document.getElementById("container");
     container.innerHTML += htmlElements;
