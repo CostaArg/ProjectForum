@@ -18,7 +18,7 @@
       <span> <%=title%> </span>
     </h1>
 
-  <p> Created by <%=user%>, <%=time%> · 3 replies</p>
+  <p> Created by <%=user%>, <%=time%></p>
     <div class="post">
       <p><%=data%></p>
     </div>
@@ -27,10 +27,40 @@
   <p> Replies:
 
   <div class="post">
-    <ul>nai</ul>
-      <ul>oxi</ul>
-        <ul>maybe</ul>
-          <ul>denkserw</ul>
+    <form action="/comment" method="post">
+
+      <input type="hidden" name="thread_id" value="<%=thread_id%>">
+
+      
+
+      <fieldset>
+      <h3>Comment:</h3>
+    <textarea rows="4" col="30" name="comment"/></textarea>
+      </fieldset>
+        <button type="submit">Comment</button>
+
+<script>
+        //comment
+            var comment_parser = new DOMParser;
+            var comment_dom = parser.parseFromString(
+                "<%=comment%>",
+                'text/html');
+            var comment = dom.body.textContent;
+            var parsedcomment = JSON.parse(comment);
+
+            var comment_htmlElements = "";
+            for (var i = 0; i < parsedcomment.length ; i++) {
+            comment_htmlElements += '<div class="postTab" <h4><a style="text-decoration: none" href="/comment?id=' + parsedcomment[i]._id + '">' + '</a></h4><p> By ' + parsedcomment[i].comment.user + ' at ' + (new Date(parsedPosts[0].comment.created_at).toUTCString()) + ' </p></div>';
+            }
+            var comment_container = document.getElementById("comment_container");
+            comment_container.innerHTML += comment_htmlElements;
+
+</script>
+
+<p><%=comment_data%></p>
+
+
+    </form>
 
   </div>
   </p>

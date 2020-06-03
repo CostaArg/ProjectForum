@@ -8,8 +8,8 @@ var Post = require('./models/Post');
 
 var app = express();
 
-var db = mongoose.connect('mongodb://localhost:27017/forum');
-//var db = mongoose.connect('mongodb://kostas123:testarw123@ds137441.mlab.com:37441/forum');
+//var db = mongoose.connect('mongodb://localhost:27017/forum');
+var db = mongoose.connect('mongodb://kostas123:testarw123@ds137441.mlab.com:37441/forum');
 var session = require('express-session')
 
 app.set('view engine', 'ejs');
@@ -24,8 +24,8 @@ app.use(session({
 }));
 
 app.get('/', function(request, response) {
-	Post.find({}, function(err, postsList) {
-		response.render('index', {title: 'home', posts: JSON.stringify(postsList)});
+	Post.find({}, function(err, postsList, commentList) {
+		response.render('index', {title: 'home', posts: JSON.stringify(postsList), comments: JSON.stringify(commentList)});
     });
 });
 
@@ -51,9 +51,9 @@ app.get('/logout', function(request, response) {
   }});
 
 app.get('/post', function(request, response) {
-  	Post.findOne({'_id':request.query.id}, function(err, post){
+  	Post.findOne({'_id': request.query.id}, function(err, post){
   		if(!err){
-  			response.render('post', {title: post.titlename, data:post.content, user:post.user, time:post.created_at.toUTCString()});
+  			response.render('post', {thread_id: request.query.id, title: post.titlename, data: post.content, user: post.user, time: post.created_at.toUTCString()}); 
   		}
   		else{
   			response.render('error', {error: err, title: 'error'});
@@ -81,7 +81,6 @@ app.post('/login', function(request, response) {
 
 app.post('/register', function(request, response) {
   if (request.body.username && request.body.password) {
-    // register
     User.create({
       username: request.body.username,
       password: request.body.password
@@ -103,14 +102,6 @@ app.post('/register', function(request, response) {
   }
 });
 
-app.get('/users.json', function(request, response) {
-  User.find({}, function(err, users) {
-    if (err) throw err;
-
-    response.send(users);
-  });
-});
-
 app.get('/register', function(request, response) {
   response.render('register', {title: 'register'});
 });
@@ -118,7 +109,6 @@ app.get('/register', function(request, response) {
 app.post('/createPost', function(request, response) {
     if (request.session.user) {
       if (request.body.titlename && request.body.content) {
-        // create post
         Post.create({
           titlename: request.body.titlename,
           content: request.body.content,
@@ -158,5 +148,47 @@ app.get('/createPost', function(request, response) {
         });
 	}
   });
+
+app.get('/comment', function(request, response) {
+    	Post.find({'_id': request.query.id}, function(err, comment){
+    		if(!err){
+    			response.render('comment', {comment_title: comment.titlename, comment_data: comment.content, comment_user: comment.user, comment_time: comment.created_at.toUTCString()});
+    		}
+    		else{
+    			response.render('error', {error: err, title: 'error'});
+    		}
+    		});
+    });
+
+app.post('/comment', function(request, response) {
+        if (request.session.user.username) {
+          if (request.body.comment) {
+            comment.create({
+              text: request.body.text,
+      		    user: request.session.user,
+              thread_id: request.query.id
+            }, function(error, comment) {
+              if (error) {
+                response.render('error', {
+                  title: 'error',
+                  error: 'Comment was not created'
+                });
+              } else {
+                response.redirect( '/comment?id=' + comment._id)
+              }
+            });
+          } else {
+            response.render('error', {
+              title: 'error',
+              error: 'Text required'
+            });
+          }
+        } else {
+            response.render('error', {
+              title: 'error',
+              error: 'You are not logged in'
+            });
+          }
+        });
 
 app.listen(6969);
