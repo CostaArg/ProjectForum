@@ -1,20 +1,27 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-      <link rel="stylesheet" href="css/stylecreatepost.css">
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <link rel="stylesheet" href="css/style.css">
           <title>Create a Post</title>
+          <link rel="stylesheet" href="css/normalize.css">
+          <link href="https://fonts.googleapis.com/css?family=Khula" rel="stylesheet" type='text/css'>
+          <link rel="stylesheet" href="css/form.css">
   </head>
   <body>
     <a href="/">forum</a>
-    <h2>Create a Post</h2>
 
     <form action="/createPost" method="POST">
+      <h2>Create a Post</h2>
+      <fieldset>
+        <h3>Title:</h3>
     <input class="title" type="text" name="titlename"/>
       <p></p>
+      <h3>Content:</h3>
     <textarea rows="4" col="30" class="content" name="content"/></textarea>
-      <p></p>
-    <input type="submit"/>
+      </fieldset>
+        <button type="submit">Create Post</button>
     </form>
 
   </body>
