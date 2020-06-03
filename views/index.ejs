@@ -1,4 +1,29 @@
-<h2>forum</h2>
-<a href="/login">login</a>
-<p>|</p>
-<a href="/register">register</a>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/style.css">
+        <title></title>
+
+  </head>
+  <body>
+    <h2>forum</h2>
+    <a href="/login">login</a>
+    <p>|</p>
+    <a href="/register">register</a>
+
+<div id="container" ></div>
+
+<script>
+
+var htmlElements = "";
+for (var i = 0; i < <%=temp%>; i++) {
+htmlElements += '<div class="postTab" <h4><a href="/post"> Help with buying a monitor </a></h4><p> By Potato21, 12 hours ago </p></div>';
+}
+var container = document.getElementById("container");
+container.innerHTML += htmlElements;
+
+</script>
+
+  </body>
+</html>

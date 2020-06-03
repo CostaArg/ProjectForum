@@ -8,7 +8,7 @@ var User = require('./models/User');
 
 var app = express();
 
-var db = mongoose.connect('mongodb://localhost:27017/forum');
+//var db = mongoose.connect('mongodb://localhost:27017/forum');
 
 
 app.set('view engine', 'ejs');
@@ -17,11 +17,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('/', function(request, response) {
-  response.render('index', {title: 'home'});
+  response.render('index', {title: 'home', temp: 8});
 });
 
 app.get('/login', function(request, response) {
   response.render('login', {title: 'login'});
+});
+
+app.get('/post', function(request, response) {
+  response.render('post', {title: 'post'});
 });
 
 app.post('/login', function(request, response) {
