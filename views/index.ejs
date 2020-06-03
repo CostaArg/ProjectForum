@@ -17,10 +17,17 @@
 <div id="container" ></div>
 
 <script>
+// decoding html entities 
+var parser = new DOMParser;
+var dom = parser.parseFromString(
+    "<%=posts%>",
+    'text/html');
+var posts = dom.body.textContent;
+var parsedPosts = JSON.parse(posts);
 
 var htmlElements = "";
-for (var i = 0; i < <%=temp%>; i++) {
-htmlElements += '<div class="postTab" <h4><a href="/post"> Help with buying a monitor </a></h4><p> By Potato21, 12 hours ago </p></div>';
+for (var i = 0; i < parsedPosts.length ; i++) {
+htmlElements += '<div class="postTab" <h4><a href="/post?id=' + parsedPosts[i]._id + '">' + parsedPosts[i].titlename + '</a></h4><p> By Potato21, 12 hours ago </p></div>';
 }
 var container = document.getElementById("container");
 container.innerHTML += htmlElements;

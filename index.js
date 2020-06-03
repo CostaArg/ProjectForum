@@ -1,6 +1,5 @@
 var express = require('express');
 var mongoose = require('mongoose');
-var pug = require('pug');
 var bodyParser = require('body-parser')
 var bcrypt = require('bcrypt')
 
@@ -24,7 +23,9 @@ app.use(session({
 }));
 
 app.get('/', function(request, response) {
-  response.render('index', {title: 'home', temp: 8});
+	Post.find({}, function(err, postsList) {
+		response.render('index', {title: 'home', posts: JSON.stringify(postsList)});
+    });
 });
 
 app.get('/login', function(request, response) {
@@ -32,7 +33,11 @@ app.get('/login', function(request, response) {
 });
 
 app.get('/post', function(request, response) {
-  response.render('post', {title: 'post'});
+	console.log(request.query.id);
+	Post.findOne({'_id':request.query.id}, function(err, post){
+		console.log(post);
+		response.render('post', {title: post.titlename, data:post.content});
+	});
 });
 
 app.post('/login', function(request, response) {
@@ -109,7 +114,7 @@ var authenticated = function(request, response, next) {
             error: 'post was not created'
           });
         } else {
-          response.send(titlename);
+          response.send("CREATED");
         }
       });
     } else {
@@ -125,8 +130,9 @@ var authenticated = function(request, response, next) {
   });
 
   //routes
-  app.get('/me', authenticated, function(request, response) {
-    response.send(request.session.user);
-  });
+app.get('/me', authenticated, function(request, response) {
+  response.send(request.session.user);
+});
+
 
 app.listen(6969);

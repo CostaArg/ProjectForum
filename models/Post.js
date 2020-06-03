@@ -13,7 +13,7 @@ postSchema.pre('save', function(next) {
   var post = this;
 
   if (!this.created_at) this.created_at = new Date();
-
+next();
 });
 
 postSchema.methods.compare = function(pw) {
